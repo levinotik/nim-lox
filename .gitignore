@@ -1,0 +1,34 @@
+nimblecache/
+htmldocs/
+
+# Ignore Nim and Nimble generated files
+nimcache/
+.nimble/
+nim_devel/
+
+# Ignore compiled Nim executables
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Ignore editor/IDE-specific files
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+
+# Ignore build artifacts
+bin/
+lib/
+nim.cfg
+nimble.lock
+
+# Ignore system and hidden files
+.DS_Store
+Thumbs.db
+
+# Ignore user-specific files
+user.cfg
+source.lox
