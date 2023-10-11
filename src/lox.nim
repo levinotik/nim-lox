@@ -69,8 +69,7 @@ proc advance(s): char {.discardable.} =
 
 proc addToken(s; `type`: TokenType, 
               literal: Option[Literal]) =
-  let text: string = s.source[s.start..s.current]
-  echo "the text I'm using for start..current is: ", text
+  let text: string = s.source[s.start..<s.current]
   s.tokens.add(Token(tokenType: `type`, lexeme: text, literal: literal,
       line: s.line))
 
@@ -162,7 +161,7 @@ proc scanToken(s) =
 proc scanTokens(s): seq[Token] =
   while not s.isAtEnd():
     s.start = s.current
-    scanToken(s)
+    s.scanToken()
 
   s.tokens.add(Token(tokenType: EOF, lexeme: "", literal: none(Literal),
       line: s.line))
