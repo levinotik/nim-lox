@@ -1,4 +1,5 @@
 import os
+import std/strutils
 import std/options
 import std/rdstdin
 
@@ -107,6 +108,20 @@ proc `string`(s) =
   let value = s.source[(s.start + 1)..(s.current - 1)]
   s.addToken(`STRING`, some(Literal(kind: `STRING`, str: value)))
 
+proc peekNext(s): char =
+  if s.current + 1 >= s.source.len:
+    '\0'
+  else:
+    s.source[s.current + 1]
+
+proc number(s) =
+  while isDigit(s.peek()): 
+    s.advance()
+  if s.peek() == '.' and isDigit(s.peekNext()):
+    s.advance()
+    while isDigit(s.peek()): s.advance()
+  s.addToken(NUMBER, some(Literal(kind: NUMBER, floatVal: parseFloat(s.source[s.start..<s.current]))))
+
 proc scanToken(s) =
   let c = advance(s)
   case c
@@ -155,7 +170,10 @@ proc scanToken(s) =
   of '"':
     s.`string`()
   else:
-    error(s.line, "Unexpected character")
+    if isDigit(c):
+      s.number()
+    else:
+      error(s.line, "Unexpected character")
     discard
 
 proc scanTokens(s): seq[Token] =
